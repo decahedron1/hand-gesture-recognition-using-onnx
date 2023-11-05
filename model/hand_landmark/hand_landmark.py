@@ -325,6 +325,6 @@ class HandLandmark(object):
             hand_landmarks[..., 0] = hand_landmarks[..., 0] + rcx - roatated_hand_half_width
             hand_landmarks[..., 1] = hand_landmarks[..., 1] + rcy - roatated_hand_half_height
             extracted_hands.append(hand_landmarks)
-            rotated_image_size_leftrights.append([rotated_image_width, rotated_image_height, left_hand_0_or_right_hand_1])
+            rotated_image_size_leftrights.append([rotated_image_width, rotated_image_height, left_hand_0_or_right_hand_1[0]])
 
         return np.asarray(extracted_hands, dtype=np.int32), np.asarray(rotated_image_size_leftrights)

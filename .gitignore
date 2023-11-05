@@ -4,3 +4,5 @@ __pycache__/
 *.profile
 *.mp4
 test_distance_calc.py
+.aider*
+.DS_Store
