@@ -88,18 +88,19 @@ def main():
         [13,17],[17,18],[18,19],[19,20],[0,17],
     ]
 
-    # Prepare camera
-    cap = cv.VideoCapture(cap_device)
-    cap.set(cv.CAP_PROP_FRAME_WIDTH, cap_width)
-    cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
-    cap_fps = cap.get(cv.CAP_PROP_FPS)
-    fourcc = cv.VideoWriter_fourcc('m', 'p', '4', 'v')
-    video_writer = cv.VideoWriter(
-        filename='output.mp4',
-        fourcc=fourcc,
-        fps=cap_fps,
-        frameSize=(cap_width, cap_height),
-    )
+    # # Prepare camera
+    # cap = cv.VideoCapture(cap_device)
+    # cap = cv.VideoCapture(cap_device)
+    # cap.set(cv.CAP_PROP_FRAME_WIDTH, cap_width)
+    # cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
+    # cap_fps = cap.get(cv.CAP_PROP_FPS)
+    # fourcc = cv.VideoWriter_fourcc('m', 'p', '4', 'v')
+    # video_writer = cv.VideoWriter(
+    #     filename='output.mp4',
+    #     fourcc=fourcc,
+    #     fps=cap_fps,
+    #     frameSize=(cap_width, cap_height),
+    # )
 
     # Load models
     palm_detection = PalmDetection(score_threshold=min_detection_confidence)
@@ -159,9 +160,17 @@ def main():
         number, mode, auto, prev_number = select_mode(key, mode, auto, prev_number)
 
         # Camera capture
-        ret, image = cap.read()
-        if not ret:
-            break
+        # ret, image = cap.read()
+        image = cv.imread("./test_images/bottom_left.jpg")
+        # [rh, rw] = (np.array(image).shape[0]/2, np.array(image).shape[1]/2) # reduced width/height
+        # [rh, rw] = (192, 192) # NOTE doesn't work
+        # [rh, rw] = (384, 384) # NOTE 
+        [cap_width, cap_height] = (192, 192) # NOTE 
+        # [cap_width, cap_height] = (384, 384) # NOTE 
+        # image = cv.resize(image.copy(), (rh, rw)) # NOTE not good
+        image = cv.resize(image.copy(), (cap_width, cap_height)) # NOTE better
+        # if not ret:
+        #     break
         image = image if args.disable_image_flip else cv.flip(image, 1) # Mirror display
         debug_image = copy.deepcopy(image)
 
@@ -441,12 +450,13 @@ def main():
 
         # Display image
         cv.imshow('Hand Gesture Recognition', debug_image)
-        video_writer.write(debug_image)
+    #     video_writer.write(debug_image)
 
-    if video_writer:
-        video_writer.release()
-    if cap:
-        cap.release()
+    # if video_writer:
+    #     video_writer.release()
+    # if cap:
+    #     # cap.release()
+    #     pass
     cv.destroyAllWindows()
 
 
